@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
@@ -20,7 +20,11 @@ const Login = () => {
     if (role === 'admin') navigate('/admin/dashboard');
     else navigate('/user/dashboard');
   };
-
+  useEffect(()=> {
+    if (user) {
+      navigate(user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard', { replace: true });
+    }
+  }, [role])
   return (
     <div>
       <h2>Login</h2>
